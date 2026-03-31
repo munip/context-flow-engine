@@ -1,0 +1,89 @@
+# LSMStore Configuration File
+
+system:
+  # Number of shards (0 = auto-detect CPU cores)
+  num_shards: 0
+  
+  # Memory allocation per shard (e.g., "2GB", "512MB")
+  memory_per_shard: "2GB"
+  
+  # Data directory
+  data_dir: "./data"
+  
+  # WAL buffer size per shard
+  wal_buffer_size: "64MB"
+  
+  # Memtable threshold per shard
+  memtable_threshold: "128MB"
+
+compaction:
+  # Compaction strategy: "leveled" or "size_tiered"
+  strategy: "leveled"
+  
+  # Level multiplier for leveled compaction
+  level_multiplier: 10
+  
+  # Maximum number of levels
+  max_levels: 7
+  
+  # Compaction threshold (percentage)
+  compaction_threshold: 0.8
+  
+  # Maximum concurrent compactions per shard
+  max_concurrent_compactions: 1
+
+network:
+  # Listen port
+  listen_port: 8080
+  
+  # Maximum concurrent connections
+  max_connections: 10000
+  
+  # Receive buffer size
+  recv_buffer_size: "64KB"
+  
+  # Send buffer size
+  send_buffer_size: "64KB"
+  
+  # io_uring queue depth
+  io_uring_depth: 4096
+
+performance:
+  # Enable NUMA awareness
+  numa_aware: true
+  
+  # CPU affinity
+  cpu_affinity: true
+  
+  # Cache line alignment
+  cache_align: true
+  
+  # Background threads
+  flush_threads: 1
+  compaction_threads: 1
+
+logging:
+  # Log level: DEBUG, INFO, WARN, ERROR
+  level: "INFO"
+  
+  # Log file path (empty = stdout)
+  file: ""
+  
+  # Enable performance logging
+  performance_logging: true
+  
+  # Statistics update interval (seconds)
+  stats_interval: 10
+
+monitoring:
+  # Enable metrics collection
+  enabled: true
+  
+  # Metrics export port
+  metrics_port: 9090
+  
+  # Enable health checks
+  health_check: true
+  
+  # Health check port
+  health_port: 8081

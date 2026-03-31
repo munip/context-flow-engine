@@ -1,0 +1,219 @@
+# Build artifacts
+build/
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.vs/
+.vssettings/
+
+# Cursor/AI assistant files
+.cursor/
+.windsurf/
+*.cursor*
+*.windsurf*
+
+# Compiler and debugger files
+*.gcno
+*.gcda
+*.lcov
+*.prof
+
+# Logging and runtime files
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Test coverage reports
+coverage/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Environment and configuration files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+*.rej
+
+# Package files
+*.tar.gz
+*.zip
+*.rar
+*.7z
+
+# Protocol buffer generated files (keep originals, exclude generated)
+*.pb.cc
+*.pb.h
+!proto/*.proto
+
+# Documentation build
+docs/_build/
+docs/.doctrees/
+site/
+
+# Performance profiling
+*.profraw
+*.profdata
+
+# Memory dumps
+core
+core.*
+*.stackdump
+
+# Lock files
+*.lock
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache directories
+cache/
+.cache/
+
+# Node modules (if any)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python (if any)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# Backup files
+*.backup
+*.bak
+
+# Generated documentation
+doxygen/
+
+# Valgrind
+*.valgrind
+
+# Sanitizer reports
+*.asan
+*.tsan
+*.msan
+*.ubsan
+
+# Clang format
+*.cf.json
+.clang-format
+
+# Editor backup and swap files
+*~
+*.swp
+*.swo
+.#*
+\#*#
+
+# Local development
+.local/
+local/
+
+# Test outputs
+test_results/
+test_output/
+*.test
+
+# Benchmark results
+benchmark_results/
+*.benchmark
+
+# Performance data
+perf.data
+perf.data.old
+
+# System files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Network captures
+*.pcap
+*.pcapng
+
+# Configuration files with sensitive data
+config/local_*
+config/production_*
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+
+# Secrets and keys
+secrets/
+.secrets
+*.secret
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Local data directories
+data/
+logs/
+tmp/

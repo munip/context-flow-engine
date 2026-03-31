@@ -1,0 +1,243 @@
+syntax = "proto3";
+
+package context_engine;
+
+option go_package = "context_engine/proto";
+option java_package = "context_engine.proto";
+option java_multiple_files = true;
+
+import "google/protobuf/timestamp.proto";
+
+// Context Engine gRPC Service Definition
+service ContextEngineService {
+  // Stream-based context ingestion with backpressure support
+  rpc IngestContext(stream ContextIngestRequest) returns (stream ContextIngestResponse);
+  
+  // Query relationships for a specific node
+  rpc QueryRelationship(RelationshipQueryRequest) returns (RelationshipQueryResponse);
+  
+  // Get context subgraph with depth traversal
+  rpc GetContextSubGraph(SubGraphQueryRequest) returns (SubGraphQueryResponse);
+  
+  // Batch operations for high throughput
+  rpc BatchIngestContext(BatchIngestRequest) returns (BatchIngestResponse);
+  rpc BatchQueryRelationship(BatchRelationshipQueryRequest) returns (BatchRelationshipQueryResponse);
+  
+  // Health check and system status
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+  rpc GetSystemStats(SystemStatsRequest) returns (SystemStatsResponse);
+}
+
+// Core data types
+message ContextNode {
+  string node_id = 1;
+  string node_type = 2;
+  map<string, string> attributes = 3;
+  int64 timestamp = 4;
+  string payload = 5;
+}
+
+message Relationship {
+  string source_id = 1;
+  string target_id = 2;
+  string relationship_type = 3;
+  double confidence = 4;
+  map<string, string> metadata = 5;
+  int64 timestamp = 6;
+  string inference_source = 7;
+}
+
+message ContextEvent {
+  string event_id = 1;
+  ContextNode node = 2;
+  repeated Relationship relationships = 3;
+  map<string, string> features = 4;
+  int64 timestamp = 5;
+}
+
+// IngestContext streaming
+message ContextIngestRequest {
+  oneof request_type {
+    ContextEvent event = 1;
+    FlowControl flow_control = 2;
+  }
+  
+  message FlowControl {
+    uint32 requested_window_size = 1;
+    bool pause = 2;
+  }
+}
+
+message ContextIngestResponse {
+  oneof response_type {
+    IngestResult result = 1;
+    FlowControlSignal flow_control = 2;
+    SystemStatus status = 3;
+  }
+  
+  message IngestResult {
+    string event_id = 1;
+    bool success = 2;
+    string error_message = 3;
+    uint64 processing_time_us = 4;
+  }
+  
+  message FlowControlSignal {
+    uint32 window_size = 1;
+    uint32 current_backlog = 2;
+    double system_load = 3;
+    bool should_slow_down = 4;
+  }
+  
+  message SystemStatus {
+    bool accepting_requests = 1;
+    string status_message = 2;
+    uint64 queue_depth = 3;
+  }
+}
+
+// Relationship query
+message RelationshipQueryRequest {
+  string node_id = 1;
+  repeated string relationship_types = 2;
+  bool include_inferred = 3;
+  uint32 max_results = 4;
+  int64 timestamp_range_start = 5;
+  int64 timestamp_range_end = 6;
+}
+
+message RelationshipQueryResponse {
+  bool success = 1;
+  string error_message = 2;
+  repeated Relationship relationships = 3;
+  uint64 total_count = 4;
+  uint64 query_time_us = 5;
+}
+
+// Subgraph query
+message SubGraphQueryRequest {
+  string root_node_id = 1;
+  uint32 depth = 2;
+  repeated string relationship_types = 3;
+  uint32 max_nodes = 4;
+  bool include_attributes = 5;
+  bool include_inferred = 6;
+  int64 timestamp_range_start = 7;
+  int64 timestamp_range_end = 8;
+}
+
+message SubGraphQueryResponse {
+  bool success = 1;
+  string error_message = 2;
+  SubGraph subgraph = 3;
+  uint64 total_nodes = 4;
+  uint64 total_edges = 5;
+  uint64 query_time_us = 6;
+}
+
+message SubGraph {
+  repeated ContextNode nodes = 1;
+  repeated Relationship edges = 2;
+  map<string, uint32> node_indices = 3; // node_id -> index in nodes array
+}
+
+// Batch operations
+message BatchIngestRequest {
+  repeated ContextEvent events = 1;
+  uint32 batch_id = 2;
+  uint32 priority = 3;
+}
+
+message BatchIngestResponse {
+  uint32 batch_id = 1;
+  repeated ContextIngestResponse.IngestResult results = 2;
+  uint64 total_processing_time_us = 3;
+  bool partial_success = 4;
+}
+
+message BatchRelationshipQueryRequest {
+  repeated string node_ids = 1;
+  repeated string relationship_types = 2;
+  bool include_inferred = 3;
+  uint32 max_results_per_node = 4;
+}
+
+message BatchRelationshipQueryResponse {
+  map<string, RelationshipQueryResponse> node_responses = 1;
+  uint64 total_processing_time_us = 2;
+}
+
+// Health and monitoring
+message HealthCheckRequest {
+  string service_name = 1;
+  bool detailed = 2;
+}
+
+message HealthCheckResponse {
+  enum HealthStatus {
+    HEALTHY = 0;
+    DEGRADED = 1;
+    UNHEALTHY = 2;
+  }
+  
+  HealthStatus status = 1;
+  string message = 2;
+  map<string, string> details = 3;
+  int64 timestamp = 4;
+}
+
+message SystemStatsRequest {
+  bool include_shard_stats = 1;
+  bool include_memory_stats = 2;
+  bool include_performance_stats = 3;
+}
+
+message SystemStatsResponse {
+  message ShardStats {
+    uint32 shard_id = 1;
+    uint64 total_requests = 2;
+    uint64 total_relationships = 3;
+    uint64 memory_usage_bytes = 4;
+    double cpu_usage = 5;
+    bool is_healthy = 6;
+  }
+  
+  message MemoryStats {
+    uint64 total_allocated = 1;
+    uint64 total_available = 2;
+    uint64 wal_usage = 3;
+    uint64 memtable_usage = 4;
+    uint64 cache_usage = 5;
+  }
+  
+  message PerformanceStats {
+    double avg_write_latency_us = 1;
+    double avg_read_latency_us = 2;
+    uint64 writes_per_second = 3;
+    uint64 reads_per_second = 4;
+    uint64 compactions_in_progress = 5;
+  }
+  
+  repeated ShardStats shard_stats = 1;
+  MemoryStats memory_stats = 2;
+  PerformanceStats performance_stats = 3;
+  int64 timestamp = 4;
+}
+
+// Error handling
+message Error {
+  enum ErrorCode {
+    UNKNOWN = 0;
+    INVALID_REQUEST = 1;
+    SHARD_UNAVAILABLE = 2;
+    RATE_LIMITED = 3;
+    SYSTEM_OVERLOADED = 4;
+    TIMEOUT = 5;
+    AUTHENTICATION_FAILED = 6;
+    AUTHORIZATION_FAILED = 7;
+  }
+  
+  ErrorCode code = 1;
+  string message = 2;
+  map<string, string> details = 3;
+}
