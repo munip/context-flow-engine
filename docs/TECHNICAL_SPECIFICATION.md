@@ -1,10 +1,10 @@
-# LSMStore Technical Specification
+# ContextLSMStore Technical Specification
 
 ## 1. System Architecture
 
 ### 1.1 Shared-Nothing, Shard-Per-Core Design
 
-LSMStore implements a shared-nothing architecture where each CPU core operates independently as a shard, eliminating lock contention and enabling linear scalability.
+ContextLSMStore implements a shared-nothing architecture where each CPU core operates independently as a shard, eliminating lock contention and enabling linear scalability.
 
 #### Core Principles:
 - **One Thread Per Core**: Each CPU core runs a dedicated thread with its own execution loop
