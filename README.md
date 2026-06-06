@@ -1,6 +1,6 @@
 # NSCFStore - High-Throughput LSM-based Context and Flow Storage Engine
 
-A high-performance, shared-nothing LSM-tree storage engine built in C++ with a shard-per-core architecture inspired by ScyllaDB/Seastar for powering context and flow engines.
+A high-performance, shared-nothing LSM-tree storage engine built in C++ with a shard-per-core architecture inspired by ScyllaDB/Seastar for powering context and flow engines with full data and AI lineage.
 
 ## Architecture Overview
 
@@ -8,6 +8,7 @@ A high-performance, shared-nothing LSM-tree storage engine built in C++ with a s
 - **Memory Management**: Pre-allocated memory pools per shard
 - **Core Components**: Lock-free SkipList Memtable, WAL, and SSTable manager
 - **Network Stack**: Asynchronous I/O using io_uring for high concurrency
+- **Graph_processing** : Efficient adjacency list processing and storage
 
 ## Building
 
